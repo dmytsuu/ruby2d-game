@@ -1,13 +1,17 @@
 require 'ruby2d'
 
-normal_animation_time = 130
-# short_animation_time = 150
-size_multiplayer = 3
+RIGHT_MOVEMENT_KEYS = %w[d right].freeze
+LEFT_MOVEMENT_KEYS = %w[a left].freeze
+UP_MOVEMENT_KEYS = %w[w up].freeze
+DOWN_MOVEMENT_KEYS = %w[s down].freeze
+
+ANIMATION_TIME = 130
+CHARACTER_SIZE_MULTIPLAYER = 3
 
 character = Sprite.new(
   'main.png',
-  width: 27 * size_multiplayer,
-  height: 35 * size_multiplayer,
+  width: 27 * CHARACTER_SIZE_MULTIPLAYER,
+  height: 35 * CHARACTER_SIZE_MULTIPLAYER,
   animations: {
     stay: [
       {
@@ -40,65 +44,63 @@ character = Sprite.new(
         x: 1,
         y: 0,
         width: 25,
-        time: normal_animation_time
+        time: ANIMATION_TIME
       },
       {
         x: 26,
         y: 0,
         width: 20,
-        time: normal_animation_time
+        time: ANIMATION_TIME
       },
       {
         x: 46,
         y: 0,
         width: 27,
-        time: normal_animation_time
+        time: ANIMATION_TIME
       },
       {
         x: 74,
         y: 0,
         width: 32,
-        time: normal_animation_time
+        time: ANIMATION_TIME
       },
       {
         x: 46,
         y: 0,
         width: 27,
-        time: normal_animation_time
+        time: ANIMATION_TIME
       },
       {
         x: 26,
         y: 0,
         width: 20,
-        time: normal_animation_time
+        time: ANIMATION_TIME
       },
       {
         x: 1,
         y: 0,
         width: 25,
-        time: normal_animation_time
+        time: ANIMATION_TIME
       },
       {
         x: 107,
         y: 0,
         width: 32,
-        time: normal_animation_time
+        time: ANIMATION_TIME
       },
     ]
   }
 )
 
+# defaults
+
 character.play animation: :stay, loop: true
 animation = :stay
-
 direction = nil
 
-RIGHT_MOVEMENT_KEYS = %w[d right].freeze
-LEFT_MOVEMENT_KEYS = %w[a left].freeze
-UP_MOVEMENT_KEYS = %w[w up].freeze
-DOWN_MOVEMENT_KEYS = %w[s down].freeze
 
 on :key_up do |event|
+  # play idle animation
   if (RIGHT_MOVEMENT_KEYS + LEFT_MOVEMENT_KEYS).include?(event.key)
     if direction == :right
       character.play animation: :stay, loop: true
@@ -109,35 +111,39 @@ on :key_up do |event|
   end
 end
 
-move_speed = 4
+MOVE_SPEED = 4
 
 on :key_held do |event|
+  # move horizontal
   if RIGHT_MOVEMENT_KEYS.include?(event.key)
-    character.x += move_speed
+    character.x += MOVE_SPEED
   elsif LEFT_MOVEMENT_KEYS.include?(event.key)
-    character.x -= move_speed
+    character.x -= MOVE_SPEED
   end
 
+  # play horizontal animation
   if RIGHT_MOVEMENT_KEYS.include?(event.key)
     unless direction == :right && animation == :run
-      character.play animation: :run, loop: true
       animation = :run
       direction = :right
+      character.play animation: animation, loop: true
     end
   elsif LEFT_MOVEMENT_KEYS.include?(event.key)
     unless direction == :left && animation == :run
-      character.play animation: :run, loop: true, flip: :horizontal
       animation = :run
       direction = :left
+      character.play animation: animation, loop: true, flip: :horizontal
     end
   end
 end
 
+# move vertical
+
 on :key_held do |event|
   if DOWN_MOVEMENT_KEYS.include?(event.key)
-    character.y += move_speed
+    character.y += MOVE_SPEED
   elsif UP_MOVEMENT_KEYS.include?(event.key)
-    character.y -= move_speed
+    character.y -= MOVE_SPEED
   end
 end
 
