@@ -2,7 +2,7 @@
 
 ### Dependencies
 
-(https://www.ruby2d.com/learn/get-started/)[Install dependencies and gem]
+[Install dependencies and gem](https://www.ruby2d.com/learn/get-started/)
 
 ### Run
 
